@@ -52,3 +52,21 @@ def test_password_without_special_character_is_rejected():
     assert "Password must contain a special character" in validate_password(
         "NoSpecial123"
     )
+
+
+def test_valid_password_returns_no_errors():
+    """A password meeting every rule produces an empty list."""
+    assert validate_password("Str0ng!Pass") == []
+
+
+def test_password_breaking_several_rules_reports_all_of_them():
+    """Every broken rule is reported, not just the first one found."""
+    errors = validate_password("abc")
+    assert sorted(errors) == sorted(
+        [
+            "Password must be at least 8 characters long",
+            "Password must contain an uppercase letter",
+            "Password must contain a digit",
+            "Password must contain a special character",
+        ]
+    )
