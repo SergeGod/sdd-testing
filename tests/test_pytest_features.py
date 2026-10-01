@@ -23,9 +23,9 @@ class TestPytestFeatures:
         self, price, quantity, discount, expected
     ):
         """Test multiple pricing scenarios from one test body."""
-        # TODO: Call calculate_total_price with price, quantity, discount
-        # TODO: Assert the result equals expected
-        assert False, "TODO: Implement this test"
+        assert calculate_total_price(price, quantity, discount) == pytest.approx(
+            expected
+        )
 
     @pytest.mark.parametrize(
         "email,expected",
@@ -41,6 +41,20 @@ class TestPytestFeatures:
     )
     def test_validate_email_parametrized(self, email, expected):
         """Test email validation with multiple cases."""
-        # TODO: Call validate_email with email
-        # TODO: Assert the result equals expected
-        assert False, "TODO: Implement this test"
+        assert validate_email(email) is expected
+
+    @pytest.mark.parametrize(
+        "price,quantity,discount,message",
+        [
+            pytest.param(-10.0, 5, 0, "must be non-negative", id="negative-price"),
+            pytest.param(10.0, -5, 0, "must be non-negative", id="negative-quantity"),
+            pytest.param(10.0, 5, 101, "must be between 0 and 100", id="discount-over-100"),
+            pytest.param(10.0, 5, -10, "must be between 0 and 100", id="negative-discount"),
+        ],
+    )
+    def test_calculate_total_price_invalid_inputs(
+        self, price, quantity, discount, message
+    ):
+        """Test every ValueError path from one test body."""
+        with pytest.raises(ValueError, match=message):
+            calculate_total_price(price, quantity, discount)
