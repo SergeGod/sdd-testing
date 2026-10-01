@@ -33,3 +33,10 @@ def test_password_without_uppercase_is_rejected():
     assert "Password must contain an uppercase letter" in validate_password(
         "lowercase1!"
     )
+
+
+def test_password_without_lowercase_is_rejected():
+    """The lowercase rule."""
+    assert "Password must contain a lowercase letter" in validate_password(
+        "UPPERCASE1!"
+    )
